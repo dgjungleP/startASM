@@ -27,4 +27,9 @@ public class StringUtil {
         CpInfo thisClassName = constantPool[thisClassInfo.getName_index().toInt() - 1];
         return thisClassName.toString();
     }
+
+    public static String getFieldName(U2 nameIndex, CpInfo[] constantPool) {
+        CpInfo info = constantPool[nameIndex.toInt() - 1];
+        return info.toString();
+    }
 }

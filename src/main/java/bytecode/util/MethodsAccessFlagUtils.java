@@ -5,18 +5,22 @@ import bytecode.type.U2;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ClassAccessFlagUtils {
+public class MethodsAccessFlagUtils {
     private static final Map<Integer, String> accessFlagMap = new HashMap<>();
 
     static {
         accessFlagMap.put(0x0001, "public");
+        accessFlagMap.put(0x0002, "private");
+        accessFlagMap.put(0x0004, "protected");
+        accessFlagMap.put(0x0008, "static");
         accessFlagMap.put(0x0010, "final");
-        accessFlagMap.put(0x0020, "super");
-        accessFlagMap.put(0x0200, "interface");
+        accessFlagMap.put(0x0020, "synchronized");
+        accessFlagMap.put(0x0040, "volatile");
+        accessFlagMap.put(0x0080, "transient");
+        accessFlagMap.put(0x0100, "native");
         accessFlagMap.put(0x0400, "abstract");
+        accessFlagMap.put(0x0800, "strict");
         accessFlagMap.put(0x1000, "synthetic");
-        accessFlagMap.put(0x2000, "annotation");
-        accessFlagMap.put(0x4000, "enum");
     }
 
 

@@ -18,6 +18,8 @@ public class ClassFileAnalysiser {
         HANDLERS.add(new AccessFlagsHandler());
         HANDLERS.add(new ThisAndSuperClassHandler());
         HANDLERS.add(new InterfacesHandler());
+        HANDLERS.add(new FieldHandler());
+        HANDLERS.add(new MethodsHandler());
         HANDLERS.sort(Comparator.comparing(BaseByteCodeHandler::order));
     }
 

@@ -1,16 +1,10 @@
 import bytecode.ClassFileAnalysisMain;
-import bytecode.type.ClassFile;
-import bytecode.type.CpInfo;
-import bytecode.type.U2;
-import bytecode.type.constant.CONSTANT_Class_info;
-import bytecode.util.ClassAccessFlagUtils;
-import bytecode.util.ClassFileAnalysiser;
-import bytecode.util.StringUtil;
+import bytecode.type.*;
+import bytecode.util.*;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.nio.ByteBuffer;
-import java.util.Arrays;
 
 public class ByteCodeTest {
     ByteBuffer codeBuf;
@@ -18,7 +12,7 @@ public class ByteCodeTest {
 
     @Before
     public void prepare() throws Exception {
-        codeBuf = ClassFileAnalysisMain.readFile("F:\\project\\startASM\\target\\classes\\bytecode\\handler\\InterfacesHandler.class");
+        codeBuf = ClassFileAnalysisMain.readFile("F:\\project\\startASM\\target\\classes\\bytecode\\util\\ClassAccessFlagUtils.class");
         classFile = ClassFileAnalysiser.analysis(codeBuf);
     }
 
@@ -44,7 +38,7 @@ public class ByteCodeTest {
     @Test
     public void testAccessFlagsHandler() throws Exception {
         U2 accessFlags = classFile.getAccess_flags();
-        System.out.println("ClassAccessFlagUtils.toClassAccessFlagsString(accessFlags) = " + ClassAccessFlagUtils.toClassAccessFlagsString(accessFlags));
+        System.out.println("ClassAccessFlagUtils.toClassAccessFlagsString(accessFlags) = " + ClassAccessFlagUtils.toAccessFlagsString(accessFlags));
     }
 
     @Test
@@ -68,6 +62,46 @@ public class ByteCodeTest {
         for (U2 anInterface : classFile.getInterfaces()) {
             String interfacesName = StringUtil.getClassName(anInterface, constantPool);
             System.out.println("interfacesName = " + interfacesName);
+        }
+
+    }
+
+    @Test
+    public void testFieldsHandler() throws Exception {
+        CpInfo[] constantPool = classFile.getConstant_pool();
+        Integer fieldsCount = classFile.getFields_count().toInt();
+        System.out.println("There have fields  count: " + fieldsCount);
+        System.out.println();
+        if (fieldsCount == 0) {
+            return;
+        }
+        FieldsInfo[] fields = classFile.getFields();
+        for (FieldsInfo field : fields) {
+            System.out.println("Access : " + FieldAccessFlagUtils.toAccessFlagsString(field.getAccess_flags()));
+            System.out.println("Attribute name: " + StringUtil.getFieldName(field.getName_index(), constantPool));
+            System.out.println("Description: " + StringUtil.getFieldName(field.getDescription_index(), constantPool));
+            System.out.println("Attribute count: " + field.getAttribute_count().toInt());
+            System.out.println();
+        }
+
+    }
+
+    @Test
+    public void testMethodHandler() throws Exception {
+        CpInfo[] constantPool = classFile.getConstant_pool();
+        Integer count = classFile.getMethods_count().toInt();
+        System.out.println("There have method  count: " + count);
+        System.out.println();
+        if (count == 0) {
+            return;
+        }
+        MethodInfo[] methodInfos = classFile.getMethods();
+        for (MethodInfo field : methodInfos) {
+            System.out.println("Access : " + MethodsAccessFlagUtils.toAccessFlagsString(field.getAccess_flags()));
+            System.out.println("Method name: " + StringUtil.getFieldName(field.getName_index(), constantPool));
+            System.out.println("Method Description: " + StringUtil.getFieldName(field.getDescription_index(), constantPool));
+            System.out.println("Attribute count: " + field.getAttribute_count().toInt());
+            System.out.println();
         }
 
     }
