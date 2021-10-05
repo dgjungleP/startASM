@@ -1,5 +1,9 @@
 package bytecode.util;
 
+import bytecode.type.CpInfo;
+import bytecode.type.U2;
+import bytecode.type.constant.CONSTANT_Class_info;
+
 public class StringUtil {
     public static String getHexString(byte[] value) {
         char[] hexChar = new char[]{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G'};
@@ -16,5 +20,11 @@ public class StringUtil {
             }
         }
         return "0x" + (builder.length() == 0 ? "00" : builder.toString());
+    }
+
+    public static String getClassName(U2 classTYpe, CpInfo[] constantPool) {
+        CONSTANT_Class_info thisClassInfo = (CONSTANT_Class_info) constantPool[classTYpe.toInt() - 1];
+        CpInfo thisClassName = constantPool[thisClassInfo.getName_index().toInt() - 1];
+        return thisClassName.toString();
     }
 }

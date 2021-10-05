@@ -1,8 +1,6 @@
 package bytecode.util;
 
-import bytecode.handler.BaseByteCodeHandler;
-import bytecode.handler.MagicHandler;
-import bytecode.handler.VersionHandler;
+import bytecode.handler.*;
 import bytecode.type.ClassFile;
 
 import java.nio.ByteBuffer;
@@ -16,6 +14,10 @@ public class ClassFileAnalysiser {
     static {
         HANDLERS.add(new MagicHandler());
         HANDLERS.add(new VersionHandler());
+        HANDLERS.add(new ConstantPoolHandler());
+        HANDLERS.add(new AccessFlagsHandler());
+        HANDLERS.add(new ThisAndSuperClassHandler());
+        HANDLERS.add(new InterfacesHandler());
         HANDLERS.sort(Comparator.comparing(BaseByteCodeHandler::order));
     }
 

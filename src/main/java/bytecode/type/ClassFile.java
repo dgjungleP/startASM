@@ -8,7 +8,7 @@ public class ClassFile {
     private U2 minor_version;//副板本号
     private U2 major_version;//主板本号
     private U2 constant_pool_count;//常量池计数器
-    private CpInfo constant_pool;//常量池
+    private CpInfo[] constant_pool;//常量池
     private U2 access_flags;//访问标记
     private U2 this_class;//类索引
     private U2 super_class;//父类索引
