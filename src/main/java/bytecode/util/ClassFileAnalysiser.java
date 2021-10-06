@@ -20,6 +20,7 @@ public class ClassFileAnalysiser {
         HANDLERS.add(new InterfacesHandler());
         HANDLERS.add(new FieldHandler());
         HANDLERS.add(new MethodsHandler());
+        HANDLERS.add(new AttributesHandler());
         HANDLERS.sort(Comparator.comparing(BaseByteCodeHandler::order));
     }
 
@@ -29,6 +30,7 @@ public class ClassFileAnalysiser {
         for (BaseByteCodeHandler handler : HANDLERS) {
             handler.read(codeBuf, classFile);
         }
+        System.out.println("Now analysis success ,if it bingo(Leave how much bytes)?" + codeBuf.remaining());
         return classFile;
     }
 }

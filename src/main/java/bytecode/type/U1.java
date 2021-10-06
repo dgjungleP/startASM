@@ -9,6 +9,10 @@ public class U1 {
         value = new byte[]{b1};
     }
 
+    public U1(byte[] byteCode) {
+        this.value = byteCode;
+    }
+
     public Integer toInt() {
         return value[0] & 0xff;
     }

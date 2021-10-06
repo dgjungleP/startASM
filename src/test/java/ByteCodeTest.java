@@ -1,6 +1,9 @@
 import bytecode.ClassFileAnalysisMain;
 import bytecode.type.*;
+import bytecode.type.constant.*;
 import bytecode.util.*;
+import com.sun.org.apache.bcel.internal.classfile.ConstantDouble;
+import lombok.experimental.FieldDefaults;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -12,7 +15,7 @@ public class ByteCodeTest {
 
     @Before
     public void prepare() throws Exception {
-        codeBuf = ClassFileAnalysisMain.readFile("F:\\project\\startASM\\target\\classes\\bytecode\\util\\ClassAccessFlagUtils.class");
+        codeBuf = ClassFileAnalysisMain.readFile("F:\\project\\startASM\\target\\classes\\bytecode\\util\\StringUtil.class");
         classFile = ClassFileAnalysiser.analysis(codeBuf);
     }
 
@@ -104,6 +107,81 @@ public class ByteCodeTest {
             System.out.println();
         }
 
+    }
+
+    @Test
+    public void testAttributesHandler() throws Exception {
+
+
+    }
+
+    @Test
+    public void testConstantValue() throws Exception {
+        CpInfo[] constantPool = classFile.getConstant_pool();
+        FieldsInfo[] fields = classFile.getFields();
+        if (fields == null) {
+            return;
+        }
+        for (FieldsInfo field : fields) {
+            AttributeInfo[] attributes = field.getAttributes();
+            if (field.getAttribute_count().toInt() == 0) {
+                continue;
+            }
+
+            System.out.println("The Field:" + constantPool[field.getName_index().toInt() - 1]);
+            for (AttributeInfo attribute : attributes) {
+                CONSTANT_Utf8_info nameInfo = (CONSTANT_Utf8_info) constantPool[attribute.getAttribute_name_index().toInt() - 1];
+                String name = new String(nameInfo.getBytes());
+                if ("ConstantValue".equalsIgnoreCase(name)) {
+                    ConstantValue_attribute constantValueAttribute = AttributeProcessingFactory.processingConstantValue(attribute);
+                    CpInfo cv = constantPool[constantValueAttribute.getConstantValue_index().toInt() - 1];
+                    if (cv instanceof CONSTANT_Utf8_info) {
+                        System.out.println("ConstantValue:" + cv);
+                    } else if (cv instanceof CONSTANT_Float_info) {
+                    } else if (cv instanceof CONSTANT_Double_info) {
+                    } else if (cv instanceof CONSTANT_Integer_info) {
+                        System.out.println("ConstantValue:" + ((CONSTANT_Integer_info) cv).getBytes().toInt());
+                    } else if (cv instanceof CONSTANT_Long_info) {
+
+
+                    }
+                }
+
+            }
+        }
+    }
+
+    @Test
+    public void testCodeAttribute() throws Exception {
+        CpInfo[] constantPool = classFile.getConstant_pool();
+        MethodInfo[] methods = classFile.getMethods();
+        if (methods == null) {
+            return;
+        }
+        for (MethodInfo methodInfo : methods) {
+            AttributeInfo[] attributes = methodInfo.getAttributes();
+            if (methodInfo.getAttribute_count().toInt() == 0) {
+                continue;
+            }
+
+            System.out.println("The Method:" + constantPool[methodInfo.getName_index().toInt() - 1]);
+            for (AttributeInfo attribute : attributes) {
+                CONSTANT_Utf8_info nameInfo = (CONSTANT_Utf8_info) constantPool[attribute.getAttribute_name_index().toInt() - 1];
+                String name = new String(nameInfo.getBytes());
+                if ("Code".equalsIgnoreCase(name)) {
+                    CodeAttribute codeAttribute = AttributeProcessingFactory.processingCode(attribute);
+                    System.out.println("Stack size: " + codeAttribute.getMax_stack().toInt());
+                    System.out.println("Local fields size: " + codeAttribute.getMax_locals().toInt());
+                    System.out.println("Byte size: " + codeAttribute.getCode_length().toInt());
+                    System.out.println("Bytes: ");
+                    System.out.println(StringUtil.toFormatHexString(codeAttribute.getCode()));
+                    for (byte code : codeAttribute.getCode()) {
+                        System.out.print((code & 0xff) + " ");
+                    }
+                    System.out.println("\n");
+                }
+            }
+        }
     }
 
 

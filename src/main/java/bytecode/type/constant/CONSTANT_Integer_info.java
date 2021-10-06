@@ -18,4 +18,8 @@ public class CONSTANT_Integer_info extends CpInfo {
     public void read(ByteBuffer codeBuf) throws Exception {
         this.bytes = new U4(codeBuf.get(), codeBuf.get(), codeBuf.get(), codeBuf.get());
     }
+
+    public U4 getBytes() {
+        return bytes;
+    }
 }

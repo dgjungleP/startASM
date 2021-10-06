@@ -27,4 +27,8 @@ public class CONSTANT_Utf8_info extends CpInfo {
     public String toString() {
         return super.toString() + ",length=" + length.toInt() + ",str=" + new String(bytes, StandardCharsets.UTF_8);
     }
+
+    public byte[] getBytes() {
+        return bytes;
+    }
 }

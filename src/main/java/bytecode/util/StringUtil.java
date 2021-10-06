@@ -32,4 +32,27 @@ public class StringUtil {
         CpInfo info = constantPool[nameIndex.toInt() - 1];
         return info.toString();
     }
+
+    public static String toFormatHexString(byte[] codes) {
+        StringBuilder codeBuilder = new StringBuilder();
+        int i = 0;
+        for (byte code : codes) {
+            codeBuilder.append(toHexString(code)).append(" ");
+            ;
+            if (++i == 9) {
+                i = 0;
+                codeBuilder.append("\n");
+            }
+        }
+        return codeBuilder.toString();
+    }
+
+    private static String toHexString(byte code) {
+        String hex = Integer.toHexString(code & 0xFF);
+        if (hex.length() < 2) {
+            hex = "0" + hex;
+        }
+        return "0x" + hex;
+
+    }
 }
