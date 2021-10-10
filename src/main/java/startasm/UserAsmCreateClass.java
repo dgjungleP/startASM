@@ -1,8 +1,9 @@
 package startasm;
 
-import jdk.internal.org.objectweb.asm.ClassWriter;
-import jdk.internal.org.objectweb.asm.MethodVisitor;
-import jdk.internal.org.objectweb.asm.Opcodes;
+import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.FieldVisitor;
+import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Opcodes;
 import startasm.util.ByteCodeUtils;
 
 import java.io.IOException;
@@ -27,6 +28,8 @@ public class UserAsmCreateClass {
         methodVisitor.visitInsn(Opcodes.RETURN);
         methodVisitor.visitMaxs(1, 1);
         methodVisitor.visitEnd();
+        FieldVisitor fieldVisitor = writer.visitField(Opcodes.ACC_PUBLIC | Opcodes.ACC_STATIC | Opcodes.ACC_FINAL, "age", "I", null, 100);
+        generateField(writer);
         writer.visitEnd();
         byte[] byteCode = writer.toByteArray();
         try {
@@ -36,6 +39,11 @@ public class UserAsmCreateClass {
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void generateField(ClassWriter writer) {
+        FieldVisitor fieldVisitor1 = writer.visitField(Opcodes.ACC_PRIVATE, "name", "Ljava/lang/String;", null, null);
+        fieldVisitor1.visitAnnotation("Llombok/Getter;", false);
     }
 
 }
